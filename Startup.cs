@@ -23,18 +23,34 @@ namespace DutchTreat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            //services.AddRazorPages();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //if (env.IsDevelopment())
+            if (env.IsEnvironment("Development"))
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // Add an error page
+            }
             //app.Run(async context =>
             //{
             //    await context.Response.WriteAsync("Hello world!");
             //});
-            app.UseDefaultFiles(); 
-            app.UseStaticFiles(); // for opening html files from wwwroot directory            
+            //app.UseDefaultFiles(); 
+            app.UseStaticFiles(); // for opening html files from wwwroot directory   
+            //app.useNodeModules(); axal versiebshi ar mushaobs
+            app.UseRouting();
+            app.UseEndpoints(cfg => {
+                cfg.MapControllerRoute(name: "Fallback", pattern: "{controller}/{action}/{id?}",
+                    new { controller = "App", action = "Index"}); 
+            });
         }
     }
 }
